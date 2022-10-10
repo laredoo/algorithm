@@ -70,6 +70,10 @@ void fillVariables(string fileName, seguidor *seguidores) {
         //cout << par.first << endl;
         FILE>>token;
         par.second = stoi(token);
+        if(par.first == 0)
+          par.first = par.second;
+        if(par.second == 0)
+          par.second = par.first;
         //cout << par.second << endl;
         //adicionamos o par de aprovacoes do seguidor 'i' na lista
         seguidores->addEdge(par, i);
@@ -77,6 +81,10 @@ void fillVariables(string fileName, seguidor *seguidores) {
         par.first = -stoi(token);
         FILE>>token;
         par.second = -stoi(token);
+        if(par.first == 0)
+          par.first = par.second;
+        if(par.second == 0)
+          par.second = par.first;
         if(i != seguidores->S - 1)
           FILE>>token;
         seguidores->addEdge(par, i);
