@@ -16,9 +16,9 @@ class graph
     int s;
     vector<int> *adj;    //um array de vectors de adjacencia
     vector<int> *adjInv; //vector de adjacencia inverso
-    bool *visited;
-    bool *visitedInv;
-    stack<int> pilha;
+    bool *visited; //array com os nos ja percorridos
+    bool *visitedInv; //array com os nos do vetor inverso ja percorrido
+    stack<int> pilha; //pilha preenchida pelos index dos vertices visitados
 
     // array que armazera os CFC que cada no pertence
     int *scc;
@@ -37,14 +37,19 @@ class graph
         counter = 1;
     }
 
-    void addEdges(int a, int b);
+    //funcao que adiciona uma aresta ao vetor de adjacencia
+    void addAresta(int a, int b);
 
-    void addEdgesInv(int a, int b);
+    //funcao que adiciona uma aresta ao vetor de adjacencia inverso
+    void addArestaInv(int a, int b);
 
+    //primeira dfs que percorre o vetor de adjacencia e preenche a pilha
     void dfsFirst(int u);
 
+    //segunda dfs que para cada entrada da pilha percorre o vetor de adjacencia inverso e preenche o array de scc
     void dfsSecond(int u);
 
+    //funcao principal do algoritmo de satisfatibilidade
     void is2sat(int n, int m, int a[], int b[]);
 };
 

@@ -1,12 +1,12 @@
 #include "../include/graph.hpp"
 
-void graph::addEdges(int a, int b) {
+void graph::addAresta(int a, int b) {
 
     this->adj[a].push_back(b);
 
 }
 
-void graph::addEdgesInv(int a, int b) {
+void graph::addArestaInv(int a, int b) {
 
     this->adjInv[b].push_back(a);
 
@@ -16,12 +16,10 @@ void graph::dfsFirst(int u) {
     if(visited[u])
         return;
     visited[u] = 1;
-    //if(adj[u].size() > 0)
-        for(int i = 0; i <adj[u].size();i++){
-            dfsFirst(adj[u][i]);
-        }   
-    //if(adj[u].size() > 0)
-        pilha.push(u);
+    for(int i = 0; i <adj[u].size();i++){
+        dfsFirst(adj[u][i]);
+    }   
+    pilha.push(u);
 }
 
 void graph::dfsSecond(int u)
@@ -29,9 +27,8 @@ void graph::dfsSecond(int u)
     if(visitedInv[u])
         return;
     visitedInv[u] = 1;
-    //if(adj[u].size() > 0)
-        for (int i=0;i<adjInv[u].size();i++)
-            dfsSecond(adjInv[u][i]);
+    for (int i=0;i<adjInv[u].size();i++)
+        dfsSecond(adjInv[u][i]);
     scc[u] = counter;
 }
 
@@ -41,55 +38,47 @@ void graph::is2sat(int n, int m, int a[], int b[]) {
         //x eh mapeado para x
         //-x eh mapeado para n+x = n - (-x)
 
-        //para a[i] or b[i], addEdges -a[i] -> b[i]
+        //para a[i] or b[i], addAresta -a[i] -> b[i]
         //AND -b[i] -> a[i]
 
         //ex:<-3,-4>
         if(a[i] < 0 && b[i] < 0) {
-            addEdges(-a[i], n - b[i]);
-            addEdgesInv(-a[i], n - b[i]);
-            addEdges(-b[i], n-a[i]);
-            addEdgesInv(-b[i], n-a[i]);
+            this->adj[-a[i]].push_back(n - b[i]);
+            this->adjInv[n - b[i]].push_back(-a[i]);
+            this->adj[-b[i]].push_back(n-a[i]);
+            this->adjInv[n-a[i]].push_back(-b[i]);
         }
 
         //ex:<3,4>
         if(a[i] > 0 && b[i] > 0) {
-            addEdges(a[i] + n, b[i]);
-            addEdges(b[i] + n, a[i]);
-            addEdgesInv(a[i] + n, b[i]);
-            addEdgesInv(b[i] + n, a[i]);
+            this->adj[a[i] + n].push_back(b[i]);
+            this->adj[b[i] + n].push_back(a[i]);
+            this->adjInv[b[i]].push_back(a[i] + n);
+            this->adjInv[a[i]].push_back(b[i] + n);
         }
 
         //ex:<0,2>
         if(a[i]==0 && b[i] > 0) {
-            cout << "i que popula addEdges: " << i << endl;
-            cout << "b[i]: " << b[i] << endl;
-            addEdges(b[i], b[i]);
-            addEdgesInv(b[i], b[i]);
+            addAresta(b[i], b[i]);
+            addArestaInv(b[i], b[i]);
         }
 
         //ex:<2,0>
         if(a[i] > 0 && b[i]==0) {
-            cout << "i que popula addEdges: " << i << endl;
-            cout << "a[i]: " << a[i] << endl;
-            addEdges(a[i], a[i]);
-            addEdgesInv(a[i], a[i]);
+            addAresta(a[i], a[i]);
+            addArestaInv(a[i], a[i]);
         }
 
         //ex:<0,-2>
         if(a[i]==0 && b[i] < 0) {
-            cout << "i que popula addEdges: " << i << endl;
-            cout << "n-b[i]: " << n-b[i] << endl;
-            addEdges(n-b[i], n-b[i]);
-            addEdgesInv(n-b[i], n-b[i]);
+            addAresta(n-b[i], n-b[i]);
+            addArestaInv(n-b[i], n-b[i]);
         }
 
         //ex:<-2,0>
         if(a[i] < 0 && b[i] == 0) {
-            cout << "i que popula addEdges: " << i << endl;
-            cout << "n-a[i]: " << n-a[i] << endl;
-            addEdges(n-a[i], n-a[i]);
-            addEdgesInv(n-a[i], n-a[i]);
+            addAresta(n-a[i], n-a[i]);
+            addArestaInv(n-a[i], n-a[i]);
         }
     }
 
@@ -106,7 +95,6 @@ void graph::is2sat(int n, int m, int a[], int b[]) {
             dfsSecond(topo);
             counter++;
         }
-            
     }
 
     for (int i=1;i<=n;i++)

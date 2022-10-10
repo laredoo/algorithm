@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "../include/campanha.hpp"
 #include "../include/seguidor.hpp"
 #include "../include/graph.hpp"
 
